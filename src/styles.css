@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;600;700;800&display=swap');
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+}
+
+body{
+    background-color: #3D3D3D;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+}
+#sidebar{
+    background-color: #2D2D2D;
+    border-radius: 40px;
+    flex: .25;
+    color: #BFBFBF;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+    margin: 20px;
+    padding: 8px;
+
+    width: 100%;
+}
+#logo{
+    font-size: 30px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 7px;
+}
+#material-chess{
+    height: 30px;
+}
+#side-bar-div{
+    height: 1px;
+    width: 90%;
+    margin: 2px;
+    background-color: #4B4B4B;
+}
+.project_title{
+    display: flex;
+    justify-content: left;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 400;
+}
+.project{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    font-size: 12px;
+    font-weight: 200;
+}
+.project[selected]{
+    background-color: #212121;
+    flex-direction: column;
+}
