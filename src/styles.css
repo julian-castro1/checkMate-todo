@@ -23,7 +23,7 @@ body{
 }
 #sidebar{
     background-color: #2D2D2D;
-    border-radius: 40px;
+    border-radius: 35px;
     flex: .25;
     color: #BFBFBF;
 
@@ -34,6 +34,7 @@ body{
     margin: 20px;
     padding: 8px;
 
+    min-width: 231px;
     width: 100%;
 }
 #logo{
@@ -71,4 +72,133 @@ body{
 .project[selected]{
     background-color: #212121;
     flex-direction: column;
+}
+#buttons{
+    margin-top: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 30px;
+    background-color: #40B14B;
+    width: 100%;
+    height: 50px;
+}
+#add-project, #add-list{
+    background-color: #40B14B;
+    flex: 1;
+    color: #2D2D2D;
+    border: 0;
+    font-weight: 600;
+    font-size: 15px;
+    height: 100%;
+}
+#add-project{
+    border-radius: 30px 0 0 30px;
+}
+#add-list{
+    border-radius: 0 30px 30px 0;
+}
+#add-div{
+    width: 1px;
+    height: 80%;
+    background-color: #2D2D2D;
+}
+#add-project:hover, #add-list:hover{
+    background-color: #3aa445;
+    cursor: pointer;
+} 
+#popup{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    min-width: 220px;
+    width: 24%;
+    top: 80%;
+    left: 27px;
+    gap: 3px;
+
+    background-color: #3D3D3D;
+    border-radius: 30px;
+    padding: 10px;
+}
+#popup-button{
+    background-color: #40B14B;
+    color: #2D2D2D;
+    border: 0;
+    font-weight: 600;
+    font-size: 15px;
+    height: 35px;
+    border-radius: 30px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+#popup-input{
+    border-radius: 30px;
+    border: 0;
+    background-color: #2D2D2D;
+    font-size: 18px;
+    width: 70%;
+
+    color: #BFBFBF;
+    padding-left: 10px;
+}
+#input-div{
+    display: flex;
+    flex-direction: row;
+    background-color: #2D2D2D;
+    border-radius: 30px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    padding: 5px;
+
+    
+}
+#input-title{
+    padding-bottom: 5px;
+    font-size: 15px;
+}
+button:hover{
+    background-color: #3aa445;
+    cursor: pointer;
+}
+#content{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+    padding: 5px;
+    padding-top: 10px;
+    width: 100%;
+    gap: 5px;
+}
+.project:hover{
+    cursor: pointer;
+}
+.project{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+    width: 100%;
+
+    padding: 5px;
+    border-radius: 20px;
+}
+.proj-title{
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 500;
+    gap: 5px;
+}
+.close{
+    height: 35px;
+}
+.project[selected='true']{
+    background-color: #212121;
 }

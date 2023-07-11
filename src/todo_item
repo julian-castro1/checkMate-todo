@@ -1,0 +1,14 @@
+class toDoItem{
+    name = "";
+    progress = 0;
+    complete = false;
+    priority = 0;
+    dueDate = "";
+    checklists = {};
+
+    constructor(attributes){
+        this.name = attributes.name;
+        this.dueDate = attributes.dueDate;
+        this.priority = attributes.priority;
+    }
+}
