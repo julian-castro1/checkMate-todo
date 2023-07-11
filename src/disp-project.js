@@ -12,22 +12,20 @@ export function newProj_popup(){
     popupButton.id = "popup-button";
     popupButton.innerHTML = "Create";
 
-    let inputDiv = document.createElement("div");
-    inputDiv.id = "input-div";
-    inputDiv.appendChild(popupInput);
-    inputDiv.appendChild(popupButton);
-    let inputTitle = document.createElement("span");
-    inputTitle.id = "input-title";
-    inputTitle.innerHTML = "Project Name:";
 
-    popup.appendChild(inputTitle);
-    popup.appendChild(inputDiv);
+    popup.appendChild(popupInput);
+    popup.appendChild(popupButton);
+
     document.body.appendChild(popup);
 
     popupButton.addEventListener("click", function () {
-        let proj = new Project(popupInput.value);
-        removePopup();
-        displayNewProject(proj);
+        if(!Project.duplicateProject(popupInput.value)){
+            let proj = new Project(popupInput.value);
+            displayNewProject(proj);
+            removePopup();
+        } else {
+            alert("Cannot create duplicate project");
+        }
     });
 
     document.getElementById("popup-input").focus();

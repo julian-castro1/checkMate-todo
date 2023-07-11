@@ -24,7 +24,7 @@ body{
 #sidebar{
     background-color: #2D2D2D;
     border-radius: 35px;
-    flex: .25;
+    flex: .2;
     color: #BFBFBF;
 
     display: flex;
@@ -109,18 +109,20 @@ body{
 } 
 #popup{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     position: absolute;
     min-width: 220px;
-    width: 24%;
-    top: 80%;
+    width: 19.5%;
+    top: 85%;
     left: 27px;
-    gap: 3px;
+    gap: 5px;
+    height: 55px;
 
     background-color: #3D3D3D;
     border-radius: 30px;
-    padding: 10px;
+    padding: 5px;
 }
 #popup-button{
     background-color: #40B14B;
@@ -128,33 +130,21 @@ body{
     border: 0;
     font-weight: 600;
     font-size: 15px;
-    height: 35px;
+    height: 46px;
     border-radius: 30px;
     padding-left: 8px;
     padding-right: 8px;
+    flex: 1;
 }
 #popup-input{
     border-radius: 30px;
     border: 0;
-    background-color: #2D2D2D;
-    font-size: 18px;
+    background-color: #3D3D3D;
+    font-size: 20px;
     width: 70%;
 
     color: #BFBFBF;
-    padding-left: 10px;
-}
-#input-div{
-    display: flex;
-    flex-direction: row;
-    background-color: #2D2D2D;
-    border-radius: 30px;
-    justify-content: space-between;
-    align-items: center;
-    gap: 5px;
-    width: 100%;
-    padding: 5px;
-
-    
+    padding-left: 20px;
 }
 #input-title{
     padding-bottom: 5px;
