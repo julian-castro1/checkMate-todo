@@ -7,6 +7,7 @@ export function newProj_popup(){
     popup.id = "popup";
     let popupInput = document.createElement("input");
     popupInput.id = "popup-input";
+    popupInput.placeholder = "Project Name";
     let popupButton = document.createElement("button");
     popupButton.id = "popup-button";
     popupButton.innerHTML = "Create";
@@ -28,6 +29,8 @@ export function newProj_popup(){
         removePopup();
         displayNewProject(proj);
     });
+
+    document.getElementById("popup-input").focus();
 }
 
 function removePopup(){
@@ -35,7 +38,13 @@ function removePopup(){
     popup.parentNode.removeChild(popup);
 }
 
-function displayNewProject(project) {
+function deleteProject(e){
+    console.log("removing: " + e.currentTarget.parentNode.id);
+    Project.removeProject(e.currentTarget.parentNode.id);
+    e.currentTarget.parentNode.remove();
+}
+
+export function displayNewProject(project) {
   // get the content container
   let sidebar = document.getElementById("content");
 
@@ -61,8 +70,18 @@ function displayNewProject(project) {
   projTitle.appendChild(icon);
   projTitle.appendChild(title);
 
-  // add event listener
+  // add event listeners
   projTitle.addEventListener("click", actionProject);
+  projTitle.addEventListener(
+    "contextmenu",
+    function (ev) {
+      ev.preventDefault();
+      if (confirm("Delete Project?")) {
+        deleteProject(ev);
+      }
+    },
+    false
+  );
 
   // append the title container to the new project div
   newProj.appendChild(projTitle);

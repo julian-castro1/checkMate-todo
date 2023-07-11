@@ -5,6 +5,7 @@ import { Project } from "./project.js";
 // import { ToDoItem } from "./todo_item.js";
 // import { Checklist } from "./checklist.js";
 import { newProj_popup } from "./disp-project.js";
+import { downloadData, uploadData } from "./local_storage.js";
 
 
 
@@ -13,8 +14,13 @@ eventListeners();
 
 function eventListeners(){
     document.getElementById("add-project").addEventListener("click", newProj_popup);
+    window.addEventListener("beforeunload", uploadData);
+    window.addEventListener("load", loadAllData);
 }
-
+function loadAllData(){
+    // load all data from local storage
+    downloadData();
+}
 function buildHomePage(){
     // this is the function that is called on first load
     let sidebar = document.createElement("div");
