@@ -162,11 +162,11 @@ button:hover{
     justify-content: left;
     align-items: center;
     padding: 5px;
-    padding-top: 10px;
+    margin-top: 10px;
     margin-bottom: 14px;
     width: 100%;
     height: auto;
-    gap: 5px;
+    gap: 4px;
 }
 .project:hover{
     cursor: pointer;
@@ -178,7 +178,7 @@ button:hover{
     align-items: center;
     width: 100%;
 
-    padding: 5px;
+    padding: 3px;
     border-radius: 20px;
 }
 .proj-title{
@@ -198,11 +198,35 @@ button:hover{
 }
 
 ::-webkit-scrollbar {
-    width: 4px;
+    width: 5px;
     background: #2D2D2D;
 }
 
 ::-webkit-scrollbar-thumb {
     background: #3D3D3D;
-    border-radius: 2px;
+    border-radius: 3px;
+}
+.todo-lists{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+    width: 100%;
+    gap: 6px;
+    padding: 10px;
+}
+.todo-list-container{
+    margin-left: 10px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: left;
+    gap: 20px;
+}
+.list-title{
+    font-size: 18px;
+    font-weight: 400;
+}
+.list-icon{
+    height: 15px;
 }
