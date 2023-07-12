@@ -196,17 +196,13 @@ button:hover{
 .project[selected='true']{
     background-color: #212121;
 }
-/* The scrollbar track */
+
 ::-webkit-scrollbar {
     width: 4px;
-    /* Set the width of the scrollbar */
     background: #2D2D2D;
-    /* Set the background color of the scrollbar track */
 }
 
-/* The scrollbar thumb (the moving part) */
 ::-webkit-scrollbar-thumb {
     background: #3D3D3D;
     border-radius: 2px;
-    /* Set the background color of the scrollbar thumb */
 }
