@@ -1,7 +1,8 @@
 import { Project } from "./project.js";
 
-export function newProj_popup(){
-    console.log("newProj_popup")
+export function new_popup(ele){
+    let proj = ele.currentTarget;
+    console.log("new_popup called for: " + proj);
     // create popup
     let popup = document.createElement("div");
     popup.id = "popup";

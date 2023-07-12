@@ -4,7 +4,7 @@ import { Project } from "./project.js";
 // import { ToDoList } from "./todo_list.js";
 // import { ToDoItem } from "./todo_item.js";
 // import { Checklist } from "./checklist.js";
-import { newProj_popup } from "./disp-project.js";
+import { new_popup } from "./disp-project.js";
 import { downloadData, uploadData } from "./local_storage.js";
 
 
@@ -13,7 +13,8 @@ buildHomePage();
 eventListeners();
 
 function eventListeners(){
-    document.getElementById("add-project").addEventListener("click", newProj_popup);
+    document.getElementById("add-project").addEventListener("click", new_popup);
+    document.getElementById("add-list").addEventListener("click", new_popup);
     window.addEventListener("beforeunload", uploadData);
     window.addEventListener("load", loadAllData);
 }

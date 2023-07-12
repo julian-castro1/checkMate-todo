@@ -82,6 +82,7 @@ body{
     background-color: #40B14B;
     width: 100%;
     height: 50px;
+    flex-shrink: 0;
 }
 #add-project, #add-list{
     background-color: #40B14B;
@@ -156,12 +157,15 @@ button:hover{
 }
 #content{
     display: flex;
+    overflow-y: auto;
     flex-direction: column;
     justify-content: left;
     align-items: center;
     padding: 5px;
     padding-top: 10px;
+    margin-bottom: 14px;
     width: 100%;
+    height: auto;
     gap: 5px;
 }
 .project:hover{
@@ -191,4 +195,18 @@ button:hover{
 }
 .project[selected='true']{
     background-color: #212121;
+}
+/* The scrollbar track */
+::-webkit-scrollbar {
+    width: 4px;
+    /* Set the width of the scrollbar */
+    background: #2D2D2D;
+    /* Set the background color of the scrollbar track */
+}
+
+/* The scrollbar thumb (the moving part) */
+::-webkit-scrollbar-thumb {
+    background: #3D3D3D;
+    border-radius: 2px;
+    /* Set the background color of the scrollbar thumb */
 }
