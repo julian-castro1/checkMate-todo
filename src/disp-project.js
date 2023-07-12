@@ -1,4 +1,5 @@
 import { Project, projects } from "./project.js";
+import ProgressBar from "progressbar.js";
 
 export function new_project(ele){
     new_popup(ele, "Project Name");
@@ -12,6 +13,9 @@ export function new_project(ele){
       }
     });
 }
+
+let progress_circle;
+let progress_circles = {};
 
 export function new_list(ele){
     new_popup(ele, "To-Do List Name");
@@ -96,6 +100,11 @@ export function displayNewProject(project) {
   icon.src = "./close.svg";
   icon.classList.add("close");
 
+  // create and set properties for the project progress circle
+  let progress = document.createElement("div");
+  progress.id = `${project.name}-progress`;
+  progress.classList.add("container");
+
   // create and set properties for the project title
   let title = document.createElement("span");
   title.innerHTML = project.name;
@@ -103,6 +112,7 @@ export function displayNewProject(project) {
   // append icon and title to the project title container
   projTitle.appendChild(icon);
   projTitle.appendChild(title);
+  projTitle.appendChild(progress);
 
   // add event listeners
   projTitle.addEventListener("click", actionProject);
@@ -113,8 +123,7 @@ export function displayNewProject(project) {
       if (confirm("Delete Project?")) {
         deleteProject(ev);
       }
-    },
-    false
+    }
   );
 
   // append the title container to the new project div
@@ -128,6 +137,22 @@ export function displayNewProject(project) {
 
   // append the new project div to the sidebar
   sidebar.appendChild(newProj);
+
+    // set progress circle
+    setProgressCircle(`${project.name}-progress`);
+}
+
+function setProgressCircle(id) {
+    progress_circle = new ProgressBar.Circle(`#${id}`, {
+        strokeWidth: 20,
+        easing: "easeInOut",
+        duration: 1000,
+        color: "#3aa445",
+        trailColor: "#212121",
+        trailWidth: 0,
+        svgStyle: null,
+    });
+    progress_circles[id] = progress_circle;
 }
 
 export function actionProject(e) {
@@ -150,10 +175,13 @@ export function actionProject(e) {
 }
 
 export function expandProject(project) {
-    project.setAttribute("selected", "true");
+  project.setAttribute("selected", "true");
+  project.children[0].children[2].setAttribute("selected", "true");
   // set icon to expanded
   let projectTitle = project.querySelector(".proj-title");
   projectTitle.querySelector("img.close").src = "./open.svg";
+  // add progress circle to project title
+  progress_circles[`${project.getAttribute("id")}-progress`].animate(.5); // Number from 0.0 to 1.0
 
   // get list div
   let toDo_ele = document.createElement("div");
@@ -165,6 +193,13 @@ export function expandProject(project) {
   for (let key in pInstance.toDoLists) {
     console.log(pInstance.toDoLists[key]);
     toDo_ele.appendChild(buildToDoList(pInstance.toDoLists[key]));
+  }
+  console.log(Object.keys(pInstance.toDoLists).length);
+  if (Object.keys(pInstance.toDoLists).length === 0) {
+    let empty = document.createElement("span");
+    empty.innerHTML = "No Lists";
+    empty.classList.add("empty");
+    toDo_ele.appendChild(empty);
   }
 
   project.appendChild(toDo_ele);
@@ -192,6 +227,7 @@ export function collapseProject(project) {
 
   // remove attribute 'selected'
   project.removeAttribute("selected");
+  project.children[0].children[2].removeAttribute("selected");
 
   // clear content from .todo-lists
   let lists = document.getElementById(project.getAttribute("id") + "-lists").remove();

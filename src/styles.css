@@ -230,3 +230,17 @@ button:hover{
 .list-icon{
     height: 15px;
 }
+.empty{
+    font-size: 15px;
+}
+.container {
+    margin: auto;
+    margin-right: 8px;
+    padding-right: 0;
+    width: 20px;
+    height: 20px;
+    visibility: hidden;
+}
+.container[selected='true'] {
+    visibility: visible;
+}
