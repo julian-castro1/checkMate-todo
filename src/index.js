@@ -43,6 +43,11 @@ function buildHomePage(){
 
     document.body.appendChild(sidebar);
 
+    // add content div to main doc
+    let main = document.createElement("div");
+    main.id = "main";
+    document.body.appendChild(main);
+
     // divider
     let divider = document.createElement("div");
     divider.id = "side-bar-div";

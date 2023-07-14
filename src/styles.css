@@ -32,7 +32,7 @@ body{
     justify-content: left;
     align-items: center;
     margin: 20px;
-    padding: 8px;
+    padding: 10px;
 
     min-width: 231px;
     width: 100%;
@@ -55,23 +55,38 @@ body{
     margin: 2px;
     background-color: #4B4B4B;
 }
-.project_title{
-    display: flex;
-    justify-content: left;
-    gap: 10px;
-    font-size: 18px;
-    font-weight: 400;
-}
-.project{
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    font-size: 12px;
-    font-weight: 200;
-}
 .project[selected]{
     background-color: #212121;
     flex-direction: column;
+}
+.project {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+    width: 100%;
+
+    font-size: 12px;
+    font-weight: 200;
+    padding: 0px;
+    border-radius: 20px;
+}
+.proj-title {
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 500;
+    gap: 0px;
+}
+
+.close {
+    height: 35px;
+}
+
+.project[selected='true'] {
+    background-color: #212121;
 }
 #buttons{
     margin-top: auto;
@@ -171,31 +186,6 @@ button:hover{
 .project:hover{
     cursor: pointer;
 }
-.project{
-    display: flex;
-    flex-direction: column;
-    justify-content: left;
-    align-items: center;
-    width: 100%;
-
-    padding: 3px;
-    border-radius: 20px;
-}
-.proj-title{
-    width: 100%;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    font-size: 20px;
-    font-weight: 500;
-    gap: 5px;
-}
-.close{
-    height: 35px;
-}
-.project[selected='true']{
-    background-color: #212121;
-}
 
 ::-webkit-scrollbar {
     width: 5px;
@@ -212,19 +202,30 @@ button:hover{
     justify-content: left;
     align-items: center;
     width: 100%;
-    gap: 6px;
-    padding: 10px;
+    gap: 2px;
+    padding-bottom:7px;
+    padding-top: 3px;
+    padding-left: 6px;
+    padding-right: 6px;
+    margin: 0px;
 }
 .todo-list-container{
-    margin-left: 10px;
+    margin-left: 0px;
     display: flex;
     width: 100%;
     align-items: center;
     justify-content: left;
-    gap: 20px;
+    padding: 4px;
+    padding-left: 10px;
+    padding-right: 3px;
+    gap: 10px;
+    border-radius: 20px;
+}
+.todo-list-container[selected='true']{
+    background-color: #2D2D2D;
 }
 .list-title{
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 400;
 }
 .list-icon{
@@ -243,4 +244,7 @@ button:hover{
 }
 .container[selected='true'] {
     visibility: visible;
+}
+.strikethrough {
+    text-decoration: line-through;
 }

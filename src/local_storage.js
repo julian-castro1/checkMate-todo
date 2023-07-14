@@ -10,7 +10,7 @@ function unpack(data) {
     if (p.hasOwnProperty(key)) {
       count++;
       let pInstance = new Project(p[key].name);
-      pInstance.loadProject(p[key].progress, p[key].toDoLists);
+      pInstance.loadProject(p[key].progress, p[key].toDoLists, p[key].path);
       projects[key] = pInstance;
       displayNewProject(pInstance);
     }
@@ -19,16 +19,15 @@ function unpack(data) {
   console.log("downloaded " + count + " projects");
 }
 
-
-function pack(){
-    // function to pack the local storage
-    let p = JSON.stringify(projects);
-    console.log("uploaded projects");
-    return p;
+function replacer(key, value) {
+  if (key === "progress_element") {
+    return Object.keys(key);
+  }
+  return value;
 }
 
 export function uploadData(){
-    localStorage.setItem("projects", pack());
+    localStorage.setItem("projects", JSON.stringify(projects, replacer));
 }
 
 export function downloadData(){

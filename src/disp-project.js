@@ -1,21 +1,24 @@
-import { Project, projects } from "./project.js";
+import { Project, projects, progress_circles } from "./project.js";
 import ProgressBar from "progressbar.js";
+import { listTitleClickHandler, currSelectedListbuild, currSelectedList } from "./disp-todo.js";
+import { toDoList } from "./todo_list.js";
 
 export function new_project(ele){
     new_popup(ele, "Project Name");
     document.getElementById("popup-button").addEventListener("click", function () {
         let parentEle = document.getElementById("popup");
-        if (!Project.duplicateProject(parentEle.children[0].value)) {
+        let name = parentEle.children[0].value;
+        if (Project.duplicateProject(name) || name.includes(" ") || name === "-") {
+            if (name.includes(" ")||name.includes("-")){ alert("Project name cannot contain spaces or dashes"); }
+            else { alert("Cannot create duplicate projects"); }
+            return;
+        }
         displayNewProject(new Project(parentEle.children[0].value));
         removePopup();
-      } else {
-        alert("Cannot create duplicate projects");
-      }
     });
 }
 
 let progress_circle;
-let progress_circles = {};
 
 export function new_list(ele){
     new_popup(ele, "To-Do List Name");
@@ -29,6 +32,11 @@ export function new_list(ele){
         let proj_name = proj_ele.getAttribute("id");
         let selected_proj = projects[proj_name];
 
+        // check that it has no spaces
+        if (document.getElementById("popup-input").value.includes(" ")) {
+            alert("List name cannot contain spaces");
+            return;
+        }
         // check if the list already exists
         let parentEle = document.getElementById("popup");
         if (selected_proj.duplicateToDoList(parentEle.children[0].value)) {
@@ -146,13 +154,15 @@ function setProgressCircle(id) {
     progress_circle = new ProgressBar.Circle(`#${id}`, {
         strokeWidth: 20,
         easing: "easeInOut",
-        duration: 1000,
+        duration: 600,
         color: "#3aa445",
         trailColor: "#212121",
         trailWidth: 0,
         svgStyle: null,
     });
     progress_circles[id] = progress_circle;
+    console.log("setting progress circle: " + id);
+    projects[id.split("-")[0]].progress_element = progress_circle;
 }
 
 export function actionProject(e) {
@@ -181,7 +191,7 @@ export function expandProject(project) {
   let projectTitle = project.querySelector(".proj-title");
   projectTitle.querySelector("img.close").src = "./open.svg";
   // add progress circle to project title
-  progress_circles[`${project.getAttribute("id")}-progress`].animate(.5); // Number from 0.0 to 1.0
+  projects[project.getAttribute("id")].updateProgress();
 
   // get list div
   let toDo_ele = document.createElement("div");
@@ -191,10 +201,10 @@ export function expandProject(project) {
   // show all lists
   let pInstance = projects[project.getAttribute("id")];
   for (let key in pInstance.toDoLists) {
-    console.log(pInstance.toDoLists[key]);
     toDo_ele.appendChild(buildToDoList(pInstance.toDoLists[key]));
+    pInstance.toDoLists[key].path = project.getAttribute("id") + "/" + pInstance.toDoLists[key].name;
   }
-  console.log(Object.keys(pInstance.toDoLists).length);
+  
   if (Object.keys(pInstance.toDoLists).length === 0) {
     let empty = document.createElement("span");
     empty.innerHTML = "No Lists";
@@ -206,17 +216,39 @@ export function expandProject(project) {
 }
 
 function buildToDoList(list){
+    // check if the list is complete
+    let complete = list.complete;
+
+    // build the list element
     let list_ele = document.createElement("div");
     list_ele.classList.add("todo-list-container");
     let list_icon = document.createElement("img");
-    list_icon.src = "./incomplete.svg";
     list_icon.classList.add("list-icon");
     let list_title = document.createElement("span");
     list_title.classList.add("list-title");
     list_title.innerHTML = list.name;
+    list_ele.id = list.name;
+    if(currSelectedList === list_ele.id){ list_ele.setAttribute("selected", "true"); }
+
+    // set icon
+    if(complete){
+        list_icon.src = "./complete.svg";
+        list_ele.classList.add("strikethrough");
+    } else {
+        list_icon.src = "./incomplete.svg";
+    }
 
     list_ele.appendChild(list_icon);
     list_ele.appendChild(list_title);
+
+    // add event listeners
+    list_ele.addEventListener("click", listTitleClickHandler);
+    list_ele.addEventListener("contextmenu", function (ev) {
+      ev.preventDefault();
+      if (confirm("Delete List?")) {
+        toDoList.deleteList(ev);
+      }
+    });
     
     return list_ele;
 }
