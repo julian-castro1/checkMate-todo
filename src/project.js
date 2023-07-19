@@ -1,6 +1,8 @@
 import { toDoList } from "./todo_list.js";
 import ProgressBar from "progressbar.js";
 import { actionProject, expandProject, collapseProject } from "./disp-project.js";
+import { nameToId } from "./index.js";
+import { replacer } from "./local_storage.js";
 
 export let projects = {};
 export let progress_circles = {};
@@ -15,16 +17,16 @@ export class Project {
     delete projects[project];
   }
   static duplicateProject(name) {
-    return projects.hasOwnProperty(name);
+    return projects.hasOwnProperty(nameToId(name));
   }
 
   constructor(name) {
     this.name = name;
     this.path = name;
-    projects[name] = this;
+    projects[nameToId(name)] = this;
   }
   loadProject(progress, toDoLists, path) {
-    this.progress_element = progress_circles[`${this.name}-progress`];
+    this.progress_element = progress_circles[`${this.name}_progress`];
     this.progress = progress;
     this.toDoLists = {};
     this.path = path;
@@ -58,10 +60,10 @@ export class Project {
     console.log("creating new list: " + name);
     let newList = new toDoList(name);
     newList.path = this.path + "/" + name;
-    this.toDoLists[newList.name] = newList;
+    this.toDoLists[nameToId(newList.name)] = newList;
 
     // display the new list
-    let proj_ele = document.getElementById(this.name);
+    let proj_ele = document.getElementById(nameToId(this.name));
     collapseProject(proj_ele);
     expandProject(proj_ele);
     this.updateProgress();

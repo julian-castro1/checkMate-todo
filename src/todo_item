@@ -1,6 +1,8 @@
-class toDoItem{
+export class toDoItem{
     name = "";
     progress = 0;
+    itemsComplete = 0;
+    totalItems = 0;
     complete = false;
     priority = 0;
     dueDate = "";
@@ -9,9 +11,11 @@ class toDoItem{
 
     constructor(attributes){
         this.name = attributes.name;
-        this.dueDate = attributes.dueDate;
-        this.priority = attributes.priority;
+        this.dueDate = attributes.dueDate === "" ? null: attributes.dueDate;
+        this.priority = attributes.priority === "" ? null: attributes.priority;
         this.path = attributes.path;
+        this.itemsComplete = 0;
+        this.totalItems = 0;
     }
 
     createChecklist(name){

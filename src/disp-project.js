@@ -2,14 +2,15 @@ import { Project, projects, progress_circles } from "./project.js";
 import ProgressBar from "progressbar.js";
 import { listTitleClickHandler, currSelectedListbuild, currSelectedList } from "./disp-todo.js";
 import { toDoList } from "./todo_list.js";
+import { nameToId } from "./index.js";
 
 export function new_project(ele){
     new_popup(ele, "Project Name");
     document.getElementById("popup-button").addEventListener("click", function () {
         let parentEle = document.getElementById("popup");
         let name = parentEle.children[0].value;
-        if (Project.duplicateProject(name) || name.includes(" ") || name === "-") {
-            if (name.includes(" ")||name.includes("-")){ alert("Project name cannot contain spaces or dashes"); }
+        if (Project.duplicateProject(name) || name === "_") {
+            if (name.includes("_")){ alert("Project name cannot contain underscores"); }
             else { alert("Cannot create duplicate projects"); }
             return;
         }
@@ -29,12 +30,17 @@ export function new_list(ele){
           alert("Please select a project");
           return;
         }
-        let proj_name = proj_ele.getAttribute("id");
-        let selected_proj = projects[proj_name];
+        let proj_id = proj_ele.getAttribute("id");
+        let selected_proj = projects[proj_id];
 
-        // check that it has no spaces
-        if (document.getElementById("popup-input").value.includes(" ")) {
-            alert("List name cannot contain spaces");
+        // check that it has no underscores
+        if (document.getElementById("popup-input").value.includes("_")) {
+            alert("Project name cannot contain underscores");
+            return;
+        }
+        // ensure a list cannot be same as project name
+        if (selected_proj.name === document.getElementById("popup-input").value) {
+            alert("Cannot use duplicate names");
             return;
         }
         // check if the list already exists
@@ -96,7 +102,7 @@ export function displayNewProject(project) {
 
   // create a new project div
   let newProj = document.createElement("div");
-  newProj.id = project.name;
+  newProj.id = nameToId(project.name);
   newProj.classList.add("project");
 
   // create a container for the project title
@@ -110,7 +116,7 @@ export function displayNewProject(project) {
 
   // create and set properties for the project progress circle
   let progress = document.createElement("div");
-  progress.id = `${project.name}-progress`;
+  progress.id = `${nameToId(project.name)}_progress`;
   progress.classList.add("container");
 
   // create and set properties for the project title
@@ -147,7 +153,7 @@ export function displayNewProject(project) {
   sidebar.appendChild(newProj);
 
     // set progress circle
-    setProgressCircle(`${project.name}-progress`);
+    setProgressCircle(`${nameToId(project.name)}_progress`);
 }
 
 function setProgressCircle(id) {
@@ -162,7 +168,11 @@ function setProgressCircle(id) {
     });
     progress_circles[id] = progress_circle;
     console.log("setting progress circle: " + id);
-    projects[id.split("-")[0]].progress_element = progress_circle;
+
+console.log("Projects: " + projects);
+console.log("ID: " + id);
+
+    projects[id.split("_")[0]].progress_element = progress_circle;
 }
 
 export function actionProject(e) {
@@ -196,7 +206,7 @@ export function expandProject(project) {
   // get list div
   let toDo_ele = document.createElement("div");
   toDo_ele.classList.add("todo-lists");
-  toDo_ele.id = project.getAttribute("id") + "-lists";
+  toDo_ele.id = project.getAttribute("id") + "_lists";
 
   // show all lists
   let pInstance = projects[project.getAttribute("id")];
@@ -204,7 +214,7 @@ export function expandProject(project) {
     toDo_ele.appendChild(buildToDoList(pInstance.toDoLists[key]));
     pInstance.toDoLists[key].path = project.getAttribute("id") + "/" + pInstance.toDoLists[key].name;
   }
-  
+
   if (Object.keys(pInstance.toDoLists).length === 0) {
     let empty = document.createElement("span");
     empty.innerHTML = "No Lists";
@@ -227,7 +237,7 @@ function buildToDoList(list){
     let list_title = document.createElement("span");
     list_title.classList.add("list-title");
     list_title.innerHTML = list.name;
-    list_ele.id = list.name;
+    list_ele.id = nameToId(list.name);
     if(currSelectedList === list_ele.id){ list_ele.setAttribute("selected", "true"); }
 
     // set icon
@@ -262,6 +272,6 @@ export function collapseProject(project) {
   project.children[0].children[2].removeAttribute("selected");
 
   // clear content from .todo-lists
-  let lists = document.getElementById(project.getAttribute("id") + "-lists").remove();
+  let lists = document.getElementById(project.getAttribute("id") + "_lists").remove();
 
 }

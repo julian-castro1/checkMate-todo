@@ -19,7 +19,7 @@ function unpack(data) {
   console.log("downloaded " + count + " projects");
 }
 
-function replacer(key, value) {
+export function replacer(key, value) {
   if (key === "progress_element") {
     return Object.keys(key);
   }
