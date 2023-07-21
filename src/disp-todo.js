@@ -1,5 +1,5 @@
 import { projects, Project } from "./project";
-import { toDoList } from "./todo_list";
+import { toDoList } from "./todo_list.js";
 import ProgressBar from "progressbar.js";
 import { updateProgress } from "./todo_item";
 import main from "progressbar.js";
@@ -14,7 +14,7 @@ export function listTitleClickHandler(event) {
   let list = event.target;
   let list_id = event.currentTarget.getAttribute("id");
   let project_id = event.currentTarget.parentElement.getAttribute("id").split("_")[0];
-  console.log("list path: " + projects[project_id].toDoLists[list_id].path);
+//   console.log("list path: " + projects[project_id].toDoLists[list_id].path);
 
   if(list.classList.contains("list-icon")){
     let list_id = list.parentElement.getAttribute("id");
@@ -84,17 +84,15 @@ export function drawToDoScreen(list) {
   path_ele.innerHTML = "test >> path";
   title_ele.innerHTML = list.name;
   noItems_ele.innerHTML = "No Items";
-  let percent = list.progress * 100 >= 1 ? list.progress * 100 : 0;
+  let percent = list.progress * 100 >= 1 ? Math.floor(list.progress * 100) : 0;
   percentage.innerHTML = percent + "%";
 
   titlebar_ele.appendChild(title_ele);
   titlebar_ele.appendChild(titleProgress_ele);
   titlebar_ele.appendChild(percentage);
-  console.log("position 2 start");
   if (Object.keys(list.toDoItems).length === 0) {
     listItems_ele.appendChild(noItems_ele);
   }
-  console.log("position 2 end");
 
   let main_ele = document.getElementById("main");
   // main_ele.appendChild(path_ele);
@@ -106,22 +104,20 @@ export function drawToDoScreen(list) {
   let line = new ProgressBar.Line("#title-progress", {
     strokeWidth: 10,
     easing: "easeInOut",
-    duration: 1000,
+    duration: 500,
     color: "#3aa445",
     trailColor: "#545454",
     trailWidth: 15,
     svgStyle: { width: "100%", height: "100%" },
   });
-
+  list.progress_bar = line;
   line.animate(list.progress); // Value from 0.0 to 1.0
 
 
   // if its empty, remove message
-  console.log("position 1 start");
     if (Object.keys(list.toDoItems).length === 0) {
         listItems_ele.innerHTML = "";
     }
-    console.log("position 1 end");
   // draw all items
     for(let key in list.toDoItems){
         if(list.toDoItems.hasOwnProperty(key)){
@@ -147,8 +143,8 @@ export function drawToDoScreen(list) {
 export function addItemHandler(listInfo){
     // create item
 
-    projects[listInfo.project_id].toDoLists[listInfo.list_id].toDoItems[listInfo.name] = new toDoItem(listInfo);
-    let item = projects[listInfo.project_id].toDoLists[listInfo.list_id].toDoItems[listInfo.name];
+    projects[listInfo.project_id].toDoLists[listInfo.list_id].toDoItems[nameToId(listInfo.name)] = new toDoItem(listInfo);
+    let item = projects[listInfo.project_id].toDoLists[listInfo.list_id].toDoItems[nameToId(listInfo.name)];
     // draw item
     drawItem(item);
 }
@@ -181,21 +177,26 @@ function drawItem(item){
 
     
 
-    console.log("********** NEW ITEM DEBUG **********")
-    console.log("item name: " + item.name);
-    console.log("item complete: " + item.complete);
-    console.log("item progress: " + item.progress);
-    console.log("item due date: " + item.dueDate);
-    console.log("item priority: " + item.priority);
-    console.log("item path: " + item.path);
-    console.log("items complete: " + item.itemsComplete);
-    console.log("items total: " + item.itemsTotal);
-    console.log("Date conversion" + parseISO(item.dueDate));
-    console.log("Date difference: " + differenceInDays(parseISO(item.dueDate), new Date()));
-    console.log("********** END ITEM DEBUG **********")
+    // console.log("********** NEW ITEM DEBUG **********")
+    // console.log("item name: " + item.name);
+    // console.log("item complete: " + item.complete);
+    // console.log("item progress: " + item.progress);
+    // console.log("item due date: " + item.dueDate);
+    // console.log("item priority: " + item.priority);
+    // console.log("item path: " + item.path);
+    // console.log("items complete: " + item.itemsComplete);
+    // console.log("items total: " + item.itemsTotal);
+    // console.log("Date conversion" + parseISO(item.dueDate));
+    // console.log("Date difference: " + differenceInDays(parseISO(item.dueDate), new Date()));
+    // console.log("********** END ITEM DEBUG **********")
 
 
-    icon.src = "./incomplete.svg";
+    if(item.complete){
+        icon.src = "./complete.svg";
+        itemName.classList.add("strikethrough");
+    } else { 
+        icon.src = "./incomplete.svg";
+    }
     itemName.innerHTML = item.name;
     progressComplete.innerHTML = item.itemsComplete;
     slash.innerHTML = "/";
@@ -219,8 +220,25 @@ function drawItem(item){
     todoItem.appendChild(dueDate);
     priority.appendChild(priorityText);
     todoItem.appendChild(priority);
+    // console.log("item path: " + item.path);
+    todoItem.setAttribute("id", item.path);
 
     document.getElementById("list-items").appendChild(todoItem);
+
+    // add event listener to item
+    todoItem.addEventListener("click", actionItem);
+      todoItem.addEventListener("contextmenu", function (ev) {
+        ev.preventDefault();
+        if (confirm("Delete List Item?")) {
+          let path = ev.currentTarget.getAttribute("id").split("/");
+          let project_id = path[0];
+          let list_id = path[1];
+          let item_id = path[2];
+        // console.log("item id: " + item_id);
+          projects[project_id].toDoLists[list_id].deleteListItem(item_id);
+          document.getElementById("list-items").removeChild(ev.currentTarget);
+        }
+      });
 
     // remove elements that arent being used
     if(!item.dueDate){
@@ -232,6 +250,53 @@ function drawItem(item){
 
     // set appropriate priority color
     setPriorityColor(item.priority, priority);
+}
+function actionItem(e){
+    let listItem = e.currentTarget;
+    let icon_clicked = e.target === listItem.children[0];
+
+    if(icon_clicked){
+        // define path
+        let path = listItem.getAttribute("id").split("/");
+        let project_id = path[0];
+        let list_id = path[1];
+        let item_id = path[2];
+
+        // determine whether to mark item as complete or incomplete
+        if(listItem.children[0].getAttribute("src") == "./complete.svg"){
+            listItem.children[0].src = "./incomplete.svg";
+            projects[project_id].toDoLists[list_id].toDoItems[item_id].complete = false;
+            listItem.children[1].classList.remove("strikethrough");
+        } else {
+            listItem.children[0].src = "./complete.svg";
+            projects[project_id].toDoLists[list_id].toDoItems[item_id].complete = true;
+            listItem.children[1].classList.add("strikethrough");
+        }
+
+        // update progress in list
+        updateEverything(project_id, list_id, item_id);
+    } else {
+        // expand or collapse the item
+        if(listItem.hasAttribute("selected")){}
+    }
+}
+
+function updateEverything(proj_id, list_id, item_id){
+    projects[proj_id].toDoLists[list_id].updateProgress();
+    projects[proj_id].updateProgress();
+    updateSidebarListProgress(proj_id, list_id);
+    document.getElementById("page-progress").innerHTML =
+    Math.floor(projects[proj_id].toDoLists[list_id].progress * 100) + "%";
+}
+function updateSidebarListProgress(proj_id, list_id){
+    let list_ele = document.getElementById(list_id);
+    if(projects[proj_id].toDoLists[list_id].complete){
+        list_ele.classList.add("strikethrough");
+        list_ele.children[0].src = "./complete.svg";
+    } else {
+        list_ele.classList.remove("strikethrough");
+        list_ele.children[0].src = "./incomplete.svg";
+    }
 }
 function setPriorityColor(priority, priorityEle){
     priorityEle.style.opacity = "50%";
@@ -261,7 +326,6 @@ function drawNewItemPopup(){
         }
         // check for checklist item duplicates
         if(currSelectedList !== null){
-            console.log("currSelectedList: " + currSelectedList);
             listInfo['list_id'] = currSelectedList;
             listInfo['project_id'] = document.getElementById(currSelectedList).parentElement.getAttribute("id").split("_")[0];
             if(projects[listInfo['project_id']].toDoLists[listInfo['list_id']].toDoItems.hasOwnProperty(nameToId(listInfo['name']))){
@@ -319,6 +383,6 @@ export function eraseToDoScreen() {
 }
 
 export function updateListProgress(){
-    let percent = list.progress * 100 >= 1 ? list.progress * 100 : 0;
+    let percent = list.progress * 100 >= 1 ? Math.floor(list.progress * 100) : 0;
     percentage.innerHTML = percent + "%";
 }

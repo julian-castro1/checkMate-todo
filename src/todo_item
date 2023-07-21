@@ -7,15 +7,24 @@ export class toDoItem{
     priority = 0;
     dueDate = "";
     path = "";
+    project_id = "";
+    list_id = "";
     checklists = {};
 
-    constructor(attributes){
-        this.name = attributes.name;
-        this.dueDate = attributes.dueDate === "" ? null: attributes.dueDate;
-        this.priority = attributes.priority === "" ? null: attributes.priority;
-        this.path = attributes.path;
+    constructor(a){
+        this.name = a.name;
+        this.project_id = a.project_id;
+        this.list_id = a.list_id;
+        this.dueDate = a.dueDate === "" ? null: a.dueDate;
+        this.priority = a.priority === "" ? null: a.priority;
+        this.path = a.path;
         this.itemsComplete = 0;
         this.totalItems = 0;
+
+        if(a.progress){this.progress = a.progress }
+        if(a.complete){this.complete = a.complete;}
+        if(a.itemsComplete){this.itemsComplete = a.itemsComplete;}
+        if(a.totalItems){this.totalItems = a.totalItems;}
     }
 
     createChecklist(name){
@@ -24,6 +33,7 @@ export class toDoItem{
         this.checklists[list.name] = list;
     }
     updateProgress(){
-        return 0;
+        this.progress = this.itemsComplete === 0 ? 0 : this.itemsComplete/this.totalItems;
+        return this.complete ? 1 : this.progress;
     }
 }

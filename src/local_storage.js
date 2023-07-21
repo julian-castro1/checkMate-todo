@@ -16,21 +16,31 @@ function unpack(data) {
     }
   }
 
-  console.log("downloaded " + count + " projects");
+//   console.log("downloaded " + count + " projects");
 }
 
 export function replacer(key, value) {
-  if (key === "progress_element") {
+  if (key === "progress_element" || key === "progress_bar") {
     return Object.keys(key);
   }
   return value;
 }
 
 export function uploadData(){
+    // // go through each list in each project and set toDoItems to {}
+    // for(let key in projects){
+    //     if(projects.hasOwnProperty(key)){
+    //         for(let list in projects[key].toDoLists){
+    //             if(projects[key].toDoLists.hasOwnProperty(list)){
+    //                 projects[key].toDoLists[list].toDoItems = {};
+    //             }
+    //         }
+    //     }
+    // }
     localStorage.setItem("projects", JSON.stringify(projects, replacer));
 }
 
 export function downloadData(){
-    console.log('downloading data');
+    // console.log('downloading data');
     unpack(localStorage.getItem("projects"));
 }

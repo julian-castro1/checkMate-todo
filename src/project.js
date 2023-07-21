@@ -1,4 +1,5 @@
 import { toDoList } from "./todo_list.js";
+import { toDoItem } from "./todo_item";
 import ProgressBar from "progressbar.js";
 import { actionProject, expandProject, collapseProject } from "./disp-project.js";
 import { nameToId } from "./index.js";
@@ -36,7 +37,25 @@ export class Project {
         let listInstance = new toDoList(toDoLists[key].name);
         listInstance.progress = toDoLists[key].progress;
         listInstance.complete = toDoLists[key].complete;
-        listInstance.toDoItems = toDoLists[key].toDoItems;
+        // populate the listInstance with the toDoItems
+        for(let item in toDoLists[key].toDoItems){
+            if(toDoLists[key].toDoItems.hasOwnProperty(item)){
+                let attributes = {};
+                attributes.name = toDoLists[key].toDoItems[item].name;
+                attributes.progress = toDoLists[key].toDoItems[item].progress;
+                attributes.itemsComplete = toDoLists[key].toDoItems[item].itemsComplete;
+                attributes.totalItems = toDoLists[key].toDoItems[item].totalItems;
+                attributes.complete = toDoLists[key].toDoItems[item].complete;
+                attributes.priority = toDoLists[key].toDoItems[item].priority;
+                attributes.dueDate = toDoLists[key].toDoItems[item].dueDate;
+                attributes.path = toDoLists[key].toDoItems[item].path;
+                attributes.project_id = toDoLists[key].toDoItems[item].project_id;
+                attributes.list_id = toDoLists[key].toDoItems[item].list_id;
+                attributes.checklists = toDoLists[key].toDoItems[item].checklists;
+
+                listInstance.toDoItems[nameToId(attributes.name)] = new toDoItem(attributes);
+            }
+        }
         listInstance.path = toDoLists[key].path;
         this.toDoLists[key] = listInstance;
       }
@@ -44,20 +63,20 @@ export class Project {
   }
   updateProgress() {
     let total = 0;
-    let complete = 0;
+    let finished = 0;
     for (let key in this.toDoLists) {
       if (this.toDoLists.hasOwnProperty(key)) {
         total++;
         if (this.toDoLists[key].complete) {
-          complete++;
+          finished++;
         }
       }
     }
-    this.progress = complete / total;
+    this.progress = total === 0 ? 0 : finished / total;
     this.progress_element.animate(this.progress);
   }
   createToDoList(name) {
-    console.log("creating new list: " + name);
+    // console.log("creating new list: " + name);
     let newList = new toDoList(name);
     newList.path = this.path + "/" + name;
     this.toDoLists[nameToId(newList.name)] = newList;

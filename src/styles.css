@@ -243,6 +243,7 @@ button:hover{
 .list-title{
     font-size: 15px;
     font-weight: 400;
+    text-align: left;
 }
 .list-icon{
     height: 15px;

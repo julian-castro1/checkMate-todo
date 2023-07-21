@@ -91,7 +91,7 @@ function removePopup(){
     popup.parentNode.removeChild(popup);
 }
 function deleteProject(e){
-    console.log("removing: " + e.currentTarget.parentNode.id);
+    // console.log("removing: " + e.currentTarget.parentNode.id);
     Project.removeProject(e.currentTarget.parentNode.id);
     e.currentTarget.parentNode.remove();
 }
@@ -167,10 +167,10 @@ function setProgressCircle(id) {
         svgStyle: null,
     });
     progress_circles[id] = progress_circle;
-    console.log("setting progress circle: " + id);
+    // console.log("setting progress circle: " + id);
 
-console.log("Projects: " + projects);
-console.log("ID: " + id);
+// console.log("Projects: " + projects);
+// console.log("ID: " + id);
 
     projects[id.split("_")[0]].progress_element = progress_circle;
 }
