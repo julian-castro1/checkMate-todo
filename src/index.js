@@ -15,7 +15,7 @@ import flatpickr from "flatpickr";
 buildHomePage();
 eventListeners();
 test();
-testToDoItem();
+// testToDoItem();
 
 export function nameToId(name){
     return name.replace(/[\s&#]/g, "-");
@@ -97,7 +97,7 @@ function test(){
   noItems_ele.innerHTML = "open or create a project to get started!";
 
   titlebar_ele.appendChild(title_ele);
-  titlebar_ele.appendChild(titleProgress_ele);
+//   titlebar_ele.appendChild(titleProgress_ele);
   listItems_ele.appendChild(noItems_ele);
 
   let main_ele = document.getElementById("main");
@@ -106,17 +106,17 @@ function test(){
   main_ele.appendChild(divider_ele);
   main_ele.appendChild(listItems_ele);
 
-  let line = new ProgressBar.Line("#title-progress", {
-    strokeWidth: 10,
-    easing: "easeInOut",
-    duration: 1400,
-    color: "#3aa445",
-    trailColor: "#545454",
-    trailWidth: 15,
-    svgStyle: { width: "100%", height: "100%" },
-  });
+//   let line = new ProgressBar.Line("#title-progress", {
+//     strokeWidth: 10,
+//     easing: "easeInOut",
+//     duration: 1400,
+//     color: "#3aa445",
+//     trailColor: "#545454",
+//     trailWidth: 15,
+//     svgStyle: { width: "100%", height: "100%" },
+//   });
 
-  line.animate(1); // Value from 0.0 to 1.0
+//   line.animate(1); // Value from 0.0 to 1.0
 }
 function eventListeners(){
     document.getElementById("add-project").addEventListener("click", new_project);
